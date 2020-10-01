@@ -3,3 +3,4 @@ articles_data
 .ipynb_checkpoints
 glove
 GoogleNews-vectors-negative300.bin
+*.json
