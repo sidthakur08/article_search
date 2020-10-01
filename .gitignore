@@ -1,2 +1,4 @@
 .DS_Store
 articles_data
+.ipynb_checkpoints
+glove
