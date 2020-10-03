@@ -14,7 +14,7 @@ print("Downloading the wordnet from nltk...")
 import nltk
 nltk.download('wordnet')
 
-file = 1
+file = 2
 paths = glob.glob(f'./articles_data/{file}/*.json')
 
 article_data = []
@@ -66,4 +66,4 @@ for i in tqdm(range(len(article_data))):
 
 print("Saving the sentence vectors...")
 with open(f"data_{file}.json","w") as f:
-    json.dump(sent_vector,f)
+    json.dump(data,f)
