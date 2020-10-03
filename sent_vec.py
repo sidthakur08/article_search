@@ -10,10 +10,11 @@ from nltk.stem import WordNetLemmatizer
 
 from gensim.models import KeyedVectors
 
+print("Downloading the wordnet from nltk...")
 import nltk
 nltk.download('wordnet')
 
-file = 2
+file = 1
 paths = glob.glob(f'./articles_data/{file}/*.json')
 
 article_data = []
@@ -41,18 +42,6 @@ def process_text(text):
     
     return cleaned_tokens
 
-data = []
-t = 0
-print("Tokenizing the text...")
-for i in tqdm(range(len(article_data))):
-    data.append({
-        'uuid':article_data[i]['uuid'],
-        'full_title':article_data[i]['thread']['section_title']+' '+article_data[i]['thread']['title_full'],
-        'url':article_data[i]['thread']['url'],
-        'title_tokens':process_text(article_data[i]['thread']['section_title']+' '+article_data[i]['thread']['title_full'])
-        }
-    )
-
 def get_vec(word):
     try:
         return model[word]
@@ -60,10 +49,20 @@ def get_vec(word):
         return np.zeros(300)
 
 model = KeyedVectors.load_word2vec_format('./GoogleNews-vectors-negative300.bin',binary=True,limit=10**6)
-sent_vector = dict()
-print("Getting the sentence vector...")
-for i in tqdm(range(len(data))):
-    sent_vector[data[i]['uuid']] = sum([get_vec(t) for t in data[i]['title_tokens']]).tolist()
+data = []
+print("Tokenizing and Getting the sentence vector...")
+for i in tqdm(range(len(article_data))):
+    full_t = article_data[i]['thread']['section_title']+' '+article_data[i]['thread']['title_full']
+    url = article_data[i]['thread']['url']
+    tokens = process_text(full_t)
+    sent_vector = sum([get_vec(t) for t in tokens]).tolist()
+
+    data.append({
+        'full_title':full_t,
+        'url':url,
+        'title_tokens':tokens,
+        'sentence_vector':sent_vector
+    })
 
 print("Saving the sentence vectors...")
 with open(f"data_{file}.json","w") as f:
