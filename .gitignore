@@ -4,3 +4,4 @@ articles_data
 glove
 GoogleNews-vectors-negative300.bin
 *.json
+*.csv
