@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import json
 from tqdm import tqdm
+from ast import literal_eval
 
 import string
 from nltk.tokenize import regexp_tokenize
@@ -21,6 +22,7 @@ lemmatizer = WordNetLemmatizer()
 
 def process_text(text):
     text = text.replace("\n"," ").replace("\r"," ")
+    text = text.replace("\xa0"," ")
 
     punc_list = '!"#$%()*+,-./:;<=>?@^_{|}~'
     t = str.maketrans(dict.fromkeys(punc_list," "))
@@ -60,6 +62,16 @@ for i in tqdm(range(data.shape[0])):
         'sentence_vector':vector
     })
 
-print("Saving the data...")
 df = pd.DataFrame(data_dict)
+
+for i in tqdm(range(df.shape[0])):
+    try:
+        if (literal_eval(df.iloc[i]['sentence_vector']) == np.zeros(300)):
+            df = df.drop([i],axis=0)
+    except Exception as e:
+        print(e)
+
+df = df.reset_index(drop=True)
+
+print("Saving the data...")
 df.to_csv('new_data.csv',index=False)
