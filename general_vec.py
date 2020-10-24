@@ -47,6 +47,7 @@ def get_vec(word):
     except:
         return np.zeros(300)
 
+print("Loading the word2vec model...")
 model = KeyedVectors.load_word2vec_format('./GoogleNews-vectors-negative300.bin',binary=True,limit=10**6)
 data_dict = []
 print("Tokenizing and Getting the sentence vector...")
@@ -65,11 +66,8 @@ for i in tqdm(range(data.shape[0])):
 df = pd.DataFrame(data_dict)
 
 for i in tqdm(range(df.shape[0])):
-    try:
-        if (literal_eval(df.iloc[i]['sentence_vector']) == np.zeros(300)):
-            df = df.drop([i],axis=0)
-    except Exception as e:
-        print(e)
+    if (df.iloc[i]['sentence_vector'] == np.zeros(300)).all():
+        df = df.drop([i],axis=0)
 
 df = df.reset_index(drop=True)
 
