@@ -1,5 +1,17 @@
-# article_search
- searching for similar articles using distance between word vectors calculated from pre-trained word2vec (google)
- 
- currently replacing OOV word with 0x300 dimensions, need to figure a better way out which can be by using fasttext by Facebook.
- 
+# Article Search
+Retreives similar articles to the one searched by using cosine similarity.
+
+### Data Source
+[CurationCorp News Articles Data](https://github.com/CurationCorp/curation-corpus)
+
+### Downloading and Unpacking Word Embeddings
+<b>Google News Vectors</b><br>
+* Total Vocab: 3,000,000,000<br>
+* Dimensions: 300
+```bash
+wget https://s3.amazonaws.com/dl4j-distribution/GoogleNews-vectors-negative300.bin.gz
+gzip GoogleNews-vectors-negative300.bin.gz
+```
+
+<b>Output</b><br>
+![](https://github.com/sidthakur08/article_search/blob/main/ss_ouput.jpg)
