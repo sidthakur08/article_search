@@ -20,10 +20,10 @@ data = data.dropna()
 stopwords_eng = stopwords.words('english')
 lemmatizer = WordNetLemmatizer()
 
-def process_text(text):
-    text = text.replace("\n"," ").replace("\r"," ")
-    text = text.replace("\xa0"," ")
+def remove_backslash(text):
+    return text.replace('\n',' ').replace('\r',' ').replace('\xa0',' ')
 
+def process_text(text):
     punc_list = '!"#$%()*+,-./:;<=>?@^_{|}~'
     t = str.maketrans(dict.fromkeys(punc_list," "))
     text = text.translate(t)
@@ -53,7 +53,7 @@ data_dict = []
 print("Tokenizing and Getting the sentence vector...")
 for i in tqdm(range(data.shape[0])):
     url = data.iloc[i]['url']
-    headline = data.iloc[i]['headline']
+    headline = remove_backslash(data.iloc[i]['headline'])
     tokens = process_text(headline)
     vector = sum([get_vec(t) for t in tokens]).tolist()
     data_dict.append({
@@ -64,10 +64,13 @@ for i in tqdm(range(data.shape[0])):
     })
 
 df = pd.DataFrame(data_dict)
-
+print("Finding zero sentence vectors...")
 for i in tqdm(range(df.shape[0])):
-    if (df.iloc[i]['sentence_vector'] == np.zeros(300)).all():
-        df = df.drop([i],axis=0)
+    try:
+        if (df.iloc[i]['sentence_vector'] == np.zeros(300)).all():
+            df = df.drop([i],axis=0)
+    except Exception as e:
+        print(e)
 
 df = df.reset_index(drop=True)
 
