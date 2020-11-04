@@ -15,7 +15,7 @@ print("Downloading the wordnet from nltk...")
 import nltk
 nltk.download('wordnet')
 
-data = pd.read_csv('data.csv')
+data = pd.read_csv('data/data.csv')
 data = data.dropna()
 stopwords_eng = stopwords.words('english')
 lemmatizer = WordNetLemmatizer()
@@ -24,6 +24,8 @@ def remove_backslash(text):
     return text.replace('\n',' ').replace('\r',' ').replace('\xa0',' ')
 
 def process_text(text):
+    text = text.lower()
+
     punc_list = '!"#$%()*+,-./:;<=>?@^_{|}~'
     t = str.maketrans(dict.fromkeys(punc_list," "))
     text = text.translate(t)
@@ -75,4 +77,4 @@ for i in tqdm(range(df.shape[0])):
 df = df.reset_index(drop=True)
 
 print("Saving the data...")
-df.to_csv('new_data.csv',index=False)
+df.to_csv('data/new_data.csv',index=False)
