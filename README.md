@@ -15,3 +15,9 @@ gzip GoogleNews-vectors-negative300.bin.gz
 
 <b>Output</b><br>
 ![](https://github.com/sidthakur08/article_search/blob/main/ss_ouput.jpg)
+
+
+### Addition to this
+1. developing an interface where you can search for a particular topic
+2. use of fasttext to tackle out of vocabulary tokens
+3. use of better similarity algorithms?
